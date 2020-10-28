@@ -19,9 +19,7 @@ namespace SISGEH_Backend.Entities
         public string Correo { get; set; }
         [Required]
         public string Pass { get; set; }
-        [Required]
         public DateTime FechaDeIngreso { get; set; }
-        [Required]
         public bool Estado { get; set; }
         public int RolPersonalId { get; set; }
         public RolPersonal RolPersonal { get; set; }

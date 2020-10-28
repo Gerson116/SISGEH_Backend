@@ -1,4 +1,7 @@
-﻿using SISGEH_Backend.DTOs;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using SISGEH_Backend.Context;
+using SISGEH_Backend.DTOs;
 using SISGEH_Backend.Entities;
 using System;
 using System.Collections.Generic;
@@ -9,6 +12,16 @@ namespace SISGEH_Backend.Services.SPersonalDeLaEmpresa
 {
     public class CRUD_Personal : ICRUD_Personal
     {
+        private SISGEH_DbContext _dbcontext;
+        private IMapper _mapper;
+        private PersonalDeLaEmpresa _personal;
+
+        public CRUD_Personal(SISGEH_DbContext dbcontext, IMapper mapper)
+        {
+            //....
+            _dbcontext = dbcontext;
+            _mapper = mapper;
+        }
         public bool CambiarEstadoDelPersonal(int id_Personal, bool estado)
         {
             throw new NotImplementedException();
@@ -16,27 +29,62 @@ namespace SISGEH_Backend.Services.SPersonalDeLaEmpresa
 
         public PersonalDeLaEmpresa EditarPersonal(PersonalDeLaEmpresaDTO editar_Personal)
         {
-            throw new NotImplementedException();
+            if (editar_Personal != null)
+            {
+                _personal = _mapper.Map<PersonalDeLaEmpresa>(editar_Personal);
+                _dbcontext.Entry(_personal).State = EntityState.Modified;
+                _dbcontext.SaveChanges();
+                return _personal;
+            }
+            return null;
         }
 
-        public bool EliminarPersonal(PersonalDeLaEmpresa eliminarPersonal)
+        public bool EliminarPersonal(PersonalDeLaEmpresa datosDelPersonal)
         {
-            throw new NotImplementedException();
+            _personal = PerfilDelPersonal(datosDelPersonal.ID);
+            if (_personal != null)
+            {
+                _dbcontext.PersonalDeLaEmpresa.Remove(datosDelPersonal);
+                _dbcontext.SaveChanges();
+                return true;
+            }
+            return false;
         }
 
         public bool EliminarPersonal(int id_personal)
         {
-            throw new NotImplementedException();
+            _personal = _dbcontext.PersonalDeLaEmpresa.Find(id_personal);
+            if (_personal != null)
+            {
+                _dbcontext.PersonalDeLaEmpresa.Remove(_personal);
+                _dbcontext.SaveChanges();
+                return true;
+            }
+            return false;
         }
 
-        public PersonalDeLaEmpresa NuevoPersonal(PersonalDeLaEmpresaDTO nuevo_Personal)
+        public bool NuevoPersonal(PersonalDeLaEmpresaDTO nuevo_Personal)
         {
-            throw new NotImplementedException();
+            if (nuevo_Personal != null)
+            {
+                _personal = _mapper.Map<PersonalDeLaEmpresa>(nuevo_Personal);
+                _personal.FechaDeIngreso = DateTime.Today;
+                _personal.Estado = true;
+                //_dbcontext.PersonalDeLaEmpresa.Add(_personal);
+                //_dbcontext.SaveChanges();
+                return true;
+            }
+            return false;
         }
 
         public PersonalDeLaEmpresa PerfilDelPersonal(int id_personal)
         {
-            throw new NotImplementedException();
+            _personal = _dbcontext.PersonalDeLaEmpresa.Find(id_personal);
+            if (_personal != null)
+            {
+                return _personal;
+            }
+            return null;
         }
     }
 }

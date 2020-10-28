@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SISGEH_Backend.DTOs;
+using SISGEH_Backend.Entities;
+using SISGEH_Backend.Services.SPersonalDeLaEmpresa;
 
 namespace SISGEH_Backend.Controllers
 {
@@ -12,9 +16,13 @@ namespace SISGEH_Backend.Controllers
     [ApiController]
     public class LoginController : ControllerBase
     {
-        public LoginController()
+        private ICRUD_Personal _personalDeLaEmpresa;
+        private bool _respuesta;
+
+        public LoginController(ICRUD_Personal personalDeLaEmpresa)
         {
-            //...
+            //... La clase Mapper la voy a inyectar para así mapear los datos.
+            _personalDeLaEmpresa = personalDeLaEmpresa;
         }
 
         [HttpPost("iniciar-sesion")]
@@ -24,15 +32,25 @@ namespace SISGEH_Backend.Controllers
         }
 
         [HttpPost("nuevo-personal")]
-        public ActionResult<string> NuevoPersonal([FromForm] PersonalDeLaEmpresaDTO nuevoPersonal) 
+        public ActionResult NuevoPersonal([FromForm] PersonalDeLaEmpresaDTO nuevoPersonal) 
         {
-            return string.Empty;
+            _respuesta = _personalDeLaEmpresa.NuevoPersonal(nuevoPersonal);
+            if (_respuesta)
+            {
+                return Ok();
+            }
+            return BadRequest();
         }
 
         [HttpPost("recuperar-sesion")]
         public ActionResult<string> RecuperarSesion() 
         {
             return string.Empty;
+        }
+
+        public Token ConstruirToken() 
+        {
+            throw new NotImplementedException();
         }
     }
 }
