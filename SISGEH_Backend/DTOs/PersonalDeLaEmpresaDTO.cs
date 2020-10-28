@@ -1,14 +1,14 @@
-﻿using System;
+﻿using SISGEH_Backend.Entities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SISGEH_Backend.Entities
+namespace SISGEH_Backend.DTOs
 {
-    public class PersonalDeLaEmpresa
+    public class PersonalDeLaEmpresaDTO
     {
-        public int ID { get; set; }
         [Required]
         public string Nombre { get; set; }
         [Required]
@@ -24,7 +24,7 @@ namespace SISGEH_Backend.Entities
         [Required]
         public bool Estado { get; set; }
         public int RolPersonalId { get; set; }
-        public RolPersonal RolPersonal { get; set; }
+        public RolPersonalDTO RolPersonal { get; set; }
         public ICollection<TelefonosDelPersonal> NumeroDeTelefono { get; set; }
     }
 }

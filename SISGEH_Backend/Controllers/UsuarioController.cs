@@ -22,7 +22,7 @@ namespace SISGEH_Backend.Controllers
             return string.Empty;
         }
 
-        [HttpGet("perfil-personal")]
+        [HttpGet("perfil-personal/{id}")]
         public ActionResult<string> Perfil(int id_personal) 
         {
             return string.Empty;
