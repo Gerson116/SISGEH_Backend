@@ -70,8 +70,8 @@ namespace SISGEH_Backend.Services.SPersonalDeLaEmpresa
                 _personal = _mapper.Map<PersonalDeLaEmpresa>(nuevo_Personal);
                 _personal.FechaDeIngreso = DateTime.Today;
                 _personal.Estado = true;
-                //_dbcontext.PersonalDeLaEmpresa.Add(_personal);
-                //_dbcontext.SaveChanges();
+                _dbcontext.PersonalDeLaEmpresa.Add(_personal);
+                _dbcontext.SaveChanges();
                 return true;
             }
             return false;
@@ -83,6 +83,17 @@ namespace SISGEH_Backend.Services.SPersonalDeLaEmpresa
             if (_personal != null)
             {
                 return _personal;
+            }
+            return null;
+        }
+
+        public IniciarSesion Sesion(IniciarSesion iniciarSesion)
+        {
+            _personal = _dbcontext.PersonalDeLaEmpresa.FirstOrDefault(p => p.Correo == iniciarSesion.Correo && p.Pass == iniciarSesion.Pass);
+            if (_personal != null)
+            {
+                iniciarSesion.Rol = _dbcontext.RolPersonal.Find(_personal.RolPersonalId).CodigoDelRol;
+                return iniciarSesion;
             }
             return null;
         }
