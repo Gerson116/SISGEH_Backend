@@ -8,6 +8,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -24,14 +25,17 @@ namespace SISGEH_Backend.Controllers
     {
         private ICRUD_Personal _personalDeLaEmpresa;
         private IConfiguration _configuration;
+        private IDataProtector _protector;
         private bool _respuesta;
         private IniciarSesion _iniciarSesion;
 
-        public LoginController(ICRUD_Personal personalDeLaEmpresa, IConfiguration configuration)
+        public LoginController(ICRUD_Personal personalDeLaEmpresa, IConfiguration configuration,
+            IDataProtectionProvider protectionProvider)
         {
             //... La clase Mapper la voy a inyectar para así mapear los datos.
             _personalDeLaEmpresa = personalDeLaEmpresa;
             _configuration = configuration;
+            //_protector = protectionProvider.CreateProtector(_configuration["Encriptando:key"]);
         }
 
         [HttpPost("iniciar-sesion")]

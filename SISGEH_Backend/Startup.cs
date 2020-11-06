@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
@@ -15,6 +16,7 @@ using Microsoft.Extensions.Logging;
 using SISGEH_Backend.Context;
 using SISGEH_Backend.DTOs;
 using SISGEH_Backend.Entities;
+using SISGEH_Backend.Services.SEncriptando;
 using SISGEH_Backend.Services.SPersonalDeLaEmpresa;
 
 namespace SISGEH_Backend
@@ -31,10 +33,20 @@ namespace SISGEH_Backend
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDataProtection();
             services.AddTransient<ICRUD_Personal, CRUD_Personal>();
+            services.AddTransient<IHashService, HashService>();
 
             services.AddDbContext<SISGEH_DbContext>(options=>
                 options.UseSqlServer(Configuration.GetConnectionString("Db_SISGEH")));
+
+            //Asignando Cors al proyecto.
+            services.AddCors(options =>
+            {
+                options.AddPolicy("PermitirApiRequest", builder => 
+                    builder.WithOrigins("https://localhost:44393").WithMethods("*")
+                );
+            });
 
             //... Mapeando objetos
             services.AddAutoMapper(configuration => 
@@ -52,6 +64,8 @@ namespace SISGEH_Backend
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseCors();
 
             app.UseHttpsRedirection();
 
