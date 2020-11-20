@@ -9,11 +9,11 @@ namespace SISGEH_Backend.Services.SPersonalDeLaEmpresa
 {
     public interface ICRUD_Personal
     {
-        PersonalDeLaEmpresa PerfilDelPersonal(int id_personal);
-        IniciarSesion Sesion (IniciarSesion iniciarSesion);
+        PersonalDeLaEmpresaDTO PerfilDelPersonal(int id_personal);
+        List<PersonalDeLaEmpresaDTO> ListadoEmpleado();
+        IniciarSesion Sesion(IniciarSesion iniciarSesion);
         bool NuevoPersonal(PersonalDeLaEmpresaDTO nuevo_Personal);
-        PersonalDeLaEmpresa EditarPersonal(PersonalDeLaEmpresaDTO editar_Personal);
-        bool EliminarPersonal(PersonalDeLaEmpresa datosDelPersonal);
+        bool EditarPersonal(PersonalDeLaEmpresaDTO editar_Personal);
         bool EliminarPersonal(int id_personal);
         bool CambiarEstadoDelPersonal(int id_Personal, bool estado);
     }

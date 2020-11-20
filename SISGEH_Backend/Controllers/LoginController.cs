@@ -35,7 +35,6 @@ namespace SISGEH_Backend.Controllers
             //... La clase Mapper la voy a inyectar para así mapear los datos.
             _personalDeLaEmpresa = personalDeLaEmpresa;
             _configuration = configuration;
-            //_protector = protectionProvider.CreateProtector(_configuration["Encriptando:key"]);
         }
 
         [HttpPost("iniciar-sesion")]

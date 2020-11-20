@@ -2,42 +2,81 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SISGEH_Backend.DTOs;
+using SISGEH_Backend.Services.SPersonalDeLaEmpresa;
 
 namespace SISGEH_Backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class UsuarioController : ControllerBase
     {
-        public UsuarioController()
+        private ICRUD_Personal _personal;
+
+        public UsuarioController(ICRUD_Personal personal)
         {
             //...
+            _personal = personal;
         }
 
         [HttpGet("personal")]
-        public ActionResult<string> ListadoPersonal() 
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "bb2d5d6e-c72e-4bb6-b245-b9058235c396")]
+        public ActionResult<List<PersonalDeLaEmpresaDTO>> ListadoPersonal() 
         {
-            return string.Empty;
+            var listado = _personal.ListadoEmpleado();
+            return listado;
         }
 
-        [HttpGet("perfil-personal/{id}")]
-        public ActionResult<string> Perfil(int id_personal) 
+        [HttpGet("perfil/{idPersonal}")]
+        public ActionResult<PersonalDeLaEmpresaDTO> Perfil(int idPersonal) 
         {
-            return string.Empty;
+            var datos = _personal.PerfilDelPersonal(idPersonal);
+            if (datos == null)
+            {
+                return NotFound();
+            }
+            return datos;
         }
 
         [HttpPost("nuevo-empleado")]
-        public ActionResult<string> NuevoEmpleado() 
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "bb2d5d6e-c72e-4bb6-b245-b9058235c396")]
+        public ActionResult NuevoEmpleado([FromForm] PersonalDeLaEmpresaDTO personalDeLaEmpresa) 
         {
-            return string.Empty;
+            var datos = _personal.NuevoPersonal(personalDeLaEmpresa);
+            if (datos != null)
+            {
+                return Ok();
+            }
+            return BadRequest();
         }
 
-        [HttpPut("modificar-datos")]
-        public ActionResult<string> ActualizarDatosPersonal() 
+        [HttpPut("modificar-datos/{idPersonal}")]
+        [Authorize(AuthenticationSchemes =JwtBearerDefaults.AuthenticationScheme, Roles = "bb2d5d6e-c72e-4bb6-b245-b9058235c396")]
+        public ActionResult ActualizarDatosPersonal([FromForm] PersonalDeLaEmpresaDTO personalDeLaEmpresa, int idPersonal) 
         {
-            return string.Empty;
+            personalDeLaEmpresa.ID = idPersonal;
+            var datos = _personal.EditarPersonal(personalDeLaEmpresa);
+            if (datos)
+            {
+                return Ok();
+            }
+            return BadRequest();
+        }
+
+        [HttpDelete("eliminar-personal/{idPersonal}")]
+        public ActionResult EliminarPersonal(int idPersonal) 
+        {
+            bool respuesta = _personal.EliminarPersonal(idPersonal);
+            if (respuesta)
+            {
+                return Ok();
+            }
+            return BadRequest();
         }
     }
 }

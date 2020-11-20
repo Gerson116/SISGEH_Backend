@@ -9,6 +9,7 @@ namespace SISGEH_Backend.DTOs
 {
     public class PersonalDeLaEmpresaDTO
     {
+        public int ID { get; set; }
         [Required]
         public string Nombre { get; set; }
         [Required]

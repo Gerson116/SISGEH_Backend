@@ -35,24 +35,15 @@ namespace SISGEH_Backend.Services.SPersonalDeLaEmpresa
             throw new NotImplementedException();
         }
 
-        public PersonalDeLaEmpresa EditarPersonal(PersonalDeLaEmpresaDTO editar_Personal)
+        public bool EditarPersonal(PersonalDeLaEmpresaDTO editar_Personal)
         {
             if (editar_Personal != null)
             {
                 _personal = _mapper.Map<PersonalDeLaEmpresa>(editar_Personal);
+                // -------AQUÍ ESTOY ENCRIPTANDO LA CONTRASEÑA EN CASO DE HABER SIDO MODIFICADA.
+                _personal.Pass = _protector.Protect(editar_Personal.Pass);
+                // -------AQUÍ ESTOY ENCRIPTANDO LA CONTRASEÑA EN CASO DE HABER SIDO MODIFICADA.
                 _dbcontext.Entry(_personal).State = EntityState.Modified;
-                _dbcontext.SaveChanges();
-                return _personal;
-            }
-            return null;
-        }
-
-        public bool EliminarPersonal(PersonalDeLaEmpresa datosDelPersonal)
-        {
-            _personal = PerfilDelPersonal(datosDelPersonal.ID);
-            if (_personal != null)
-            {
-                _dbcontext.PersonalDeLaEmpresa.Remove(datosDelPersonal);
                 _dbcontext.SaveChanges();
                 return true;
             }
@@ -69,6 +60,14 @@ namespace SISGEH_Backend.Services.SPersonalDeLaEmpresa
                 return true;
             }
             return false;
+        }
+
+        public List<PersonalDeLaEmpresaDTO> ListadoEmpleado()
+        {
+            var listado = _dbcontext.PersonalDeLaEmpresa.ToList();
+            var listadoDTO = new List<PersonalDeLaEmpresaDTO>();
+            listadoDTO = _mapper.Map<List<PersonalDeLaEmpresaDTO>>(listado);
+            return listadoDTO;
         }
 
         public bool NuevoPersonal(PersonalDeLaEmpresaDTO nuevo_Personal)
@@ -88,12 +87,13 @@ namespace SISGEH_Backend.Services.SPersonalDeLaEmpresa
             return false;
         }
 
-        public PersonalDeLaEmpresa PerfilDelPersonal(int id_personal)
+        public PersonalDeLaEmpresaDTO PerfilDelPersonal(int id_personal)
         {
             _personal = _dbcontext.PersonalDeLaEmpresa.Find(id_personal);
             if (_personal != null)
             {
-                return _personal;
+                var datos = _mapper.Map<PersonalDeLaEmpresaDTO>(_personal);
+                return datos;
             }
             return null;
         }
