@@ -45,7 +45,7 @@ namespace SISGEH_Backend.Controllers
 
         [HttpPost("nuevo-empleado")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "bb2d5d6e-c72e-4bb6-b245-b9058235c396")]
-        public ActionResult NuevoEmpleado([FromForm] PersonalDeLaEmpresaDTO personalDeLaEmpresa) 
+        public ActionResult NuevoEmpleado([FromForm] PersonalDeLaEmpresaDTO personalDeLaEmpresa)
         {
             var datos = _personal.NuevoPersonal(personalDeLaEmpresa);
             if (datos != null)
@@ -68,7 +68,15 @@ namespace SISGEH_Backend.Controllers
             return BadRequest();
         }
 
+        [HttpPatch("editar-perfil/{idPersonal}")]
+        public ActionResult ActualizarDatosPersonal()
+        {
+            //...
+            throw new NotImplementedException();
+        }
+
         [HttpDelete("eliminar-personal/{idPersonal}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "bb2d5d6e-c72e-4bb6-b245-b9058235c396")]
         public ActionResult EliminarPersonal(int idPersonal) 
         {
             bool respuesta = _personal.EliminarPersonal(idPersonal);

@@ -14,6 +14,7 @@ namespace SISGEH_Backend.Services.SPersonalDeLaEmpresa
         IniciarSesion Sesion(IniciarSesion iniciarSesion);
         bool NuevoPersonal(PersonalDeLaEmpresaDTO nuevo_Personal);
         bool EditarPersonal(PersonalDeLaEmpresaDTO editar_Personal);
+        bool BloquearPersonal(bool bloquearPersonal);
         bool EliminarPersonal(int id_personal);
         bool CambiarEstadoDelPersonal(int id_Personal, bool estado);
     }

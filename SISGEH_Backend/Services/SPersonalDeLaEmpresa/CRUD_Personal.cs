@@ -30,6 +30,12 @@ namespace SISGEH_Backend.Services.SPersonalDeLaEmpresa
             _hashService = hashService;
             _protector = protectionProvider.CreateProtector(configuration["Encriptando:key"]);
         }
+
+        public bool BloquearPersonal(bool bloquearPersonal)
+        {
+            throw new NotImplementedException();
+        }
+
         public bool CambiarEstadoDelPersonal(int id_Personal, bool estado)
         {
             throw new NotImplementedException();
@@ -43,6 +49,7 @@ namespace SISGEH_Backend.Services.SPersonalDeLaEmpresa
                 // -------AQUÍ ESTOY ENCRIPTANDO LA CONTRASEÑA EN CASO DE HABER SIDO MODIFICADA.
                 _personal.Pass = _protector.Protect(editar_Personal.Pass);
                 // -------AQUÍ ESTOY ENCRIPTANDO LA CONTRASEÑA EN CASO DE HABER SIDO MODIFICADA.
+                _personal.Estado = true;
                 _dbcontext.Entry(_personal).State = EntityState.Modified;
                 _dbcontext.SaveChanges();
                 return true;
