@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using SISGEH_Backend.Context;
@@ -10,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace SISGEH_Backend.Services.SPersonalDeLaEmpresa
 {
@@ -31,9 +33,15 @@ namespace SISGEH_Backend.Services.SPersonalDeLaEmpresa
             _protector = protectionProvider.CreateProtector(configuration["Encriptando:key"]);
         }
 
-        public bool BloquearPersonal(bool bloquearPersonal)
+        public bool BloquearPersonal(int idPersonal, JsonPatchDocument<PersonalDeLaEmpresa> patchDocument)
         {
-            throw new NotImplementedException();
+            var perfil = PerfilDelPersonal(idPersonal);
+            if (perfil != null)
+            {
+                //patchDocument.ApplyTo(perfil, ModelState);
+                return true;
+            }
+            return false;
         }
 
         public bool CambiarEstadoDelPersonal(int id_Personal, bool estado)

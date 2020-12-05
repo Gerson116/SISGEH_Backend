@@ -9,15 +9,15 @@ namespace SISGEH_Backend.Entities
     public class PersonalDeLaEmpresa
     {
         public int ID { get; set; }
-        [Required]
+        //[Required]
         public string Nombre { get; set; }
-        [Required]
+        //[Required]
         public string Apellido { get; set; }
-        [Required]
+        //[Required]
         public DateTime FechaDeNacimiento { get; set; }
-        [Required]
+        //[Required]
         public string Correo { get; set; }
-        [Required]
+        //[Required]
         public string Pass { get; set; }
         public DateTime FechaDeIngreso { get; set; }
         public bool Estado { get; set; }

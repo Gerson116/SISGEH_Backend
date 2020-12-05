@@ -37,11 +37,14 @@ namespace SISGEH_Backend
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDataProtection();
+
             services.AddTransient<ICRUD_Personal, CRUD_Personal>();
+
             services.AddTransient<IHashService, HashService>();
 
             services.AddDbContext<SISGEH_DbContext>(options=>
-                options.UseSqlServer(Configuration.GetConnectionString("Db_SISGEH")));
+                options.UseSqlServer(Configuration.GetConnectionString("Db_SISGEH"))
+                );
 
             //Autenticación por JWT.
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -55,7 +58,7 @@ namespace SISGEH_Backend
                 ClockSkew = TimeSpan.Zero
             });
 
-            //Asignando Cors al proyecto.
+            // Asignando Cors al proyecto.
             services.AddCors(options =>
             {
                 options.AddPolicy("PermitirApiRequest", builder =>
@@ -69,6 +72,9 @@ namespace SISGEH_Backend
                 configuration.CreateMap<PersonalDeLaEmpresaDTO, PersonalDeLaEmpresa>();
                 configuration.CreateMap<PersonalDeLaEmpresa, PersonalDeLaEmpresaDTO>();
             }, typeof(Startup));
+
+            //... Agregando
+            services.AddControllersWithViews().AddNewtonsoftJson();
 
             services.AddControllers();
         }
